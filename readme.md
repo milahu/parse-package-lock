@@ -2,7 +2,7 @@
 
 parse lockfiles of npm, yarn, pnpm
 
-* only 160 lines of code: readable, hackable
+* only 200 lines of code: readable, hackable
 * using the original code to parse lockfiles
 
 ## why
@@ -15,13 +15,13 @@ useful for
 
 ## todo
 
-* implement workspaces
-  * [npm](https://docs.npmjs.com/cli/v7/using-npm/workspaces)
-  * [yarn](https://yarnpkg.com/features/workspaces)
-  * [pnpm](https://pnpm.io/workspaces)
-* test cycles (cyclic dependency graphs)
-* convert to ESM?
-* add typescript declaration file `*.d.ts`
+* [ ] implement workspaces
+  * [ ] [npm](https://docs.npmjs.com/cli/v7/using-npm/workspaces)
+  * [ ] [yarn](https://yarnpkg.com/features/workspaces)
+  * [x] [pnpm](https://pnpm.io/workspaces) (TODO verify)
+* [ ] test cycles (cyclic dependency graphs)
+* [ ] convert to ESM?
+* [ ] add typescript declaration file `*.d.ts`
 
 ## similar projects
 
