@@ -1,0 +1,36 @@
+{
+  "name": "parselock",
+  "version": "0.0.1",
+  "description": "parse lockfiles of npm, yarn, pnpm",
+  "main": "parselock.js",
+  "scripts": {
+    "test": "./test.sh"
+  },
+  "keywords": [
+    "nodejs-lockfile-parser",
+    "lockfile",
+    "shrinkwrap",
+    "parser",
+    "parse",
+    "lock file",
+    "lock file parser",
+    "lockfile parser",
+    "node",
+    "npm",
+    "package-lock.json",
+    "npm-shrinkwrap.json",
+    "yarn",
+    "yarn.lock",
+    "pnpm",
+    "pnpm-lock.yaml"
+  ],
+  "author": "milahu",
+  "license": "MIT",
+  "dependencies": {
+    "@npmcli/arborist": "*",
+    "@pnpm/lockfile-file": "*",
+    "@pnpm/logger": "*",
+    "@yarnpkg/lockfile": "*",
+    "semver": "*"
+  }
+}
