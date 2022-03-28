@@ -2,7 +2,7 @@
   "name": "parselock",
   "version": "0.0.1",
   "description": "parse lockfiles of npm, yarn, pnpm",
-  "main": "parselock.js",
+  "main": "src/parselock.js",
   "scripts": {
     "postinstall": "patch-package",
     "test": "./test.sh"

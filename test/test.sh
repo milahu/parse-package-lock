@@ -3,7 +3,7 @@
 set -e # exit on error
 set -x # xtrace
 
-parselock="$(readlink -f parselock.js)"
+parselock="$(readlink -f ../src/parselock.js)"
 
 mkdir tmp || true
 (
