@@ -10,11 +10,15 @@ parse lockfiles of npm, yarn, pnpm
 useful for
 
 * implementing a custom `npm install`
+  * example: [pnpm-install-only](https://github.com/milahu/pnpm-install-only)
 * analysis of the dependency tree
 
 ## todo
 
 * implement workspaces
+  * [npm](https://docs.npmjs.com/cli/v7/using-npm/workspaces)
+  * [yarn](https://yarnpkg.com/features/workspaces)
+  * [pnpm](https://pnpm.io/workspaces)
 * test cycles (cyclic dependency graphs)
 
 ## similar projects
