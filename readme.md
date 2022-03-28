@@ -20,6 +20,8 @@ useful for
   * [yarn](https://yarnpkg.com/features/workspaces)
   * [pnpm](https://pnpm.io/workspaces)
 * test cycles (cyclic dependency graphs)
+* convert to ESM?
+* add typescript declaration file `*.d.ts`
 
 ## similar projects
 

@@ -4,6 +4,7 @@
   "description": "parse lockfiles of npm, yarn, pnpm",
   "main": "parselock.js",
   "scripts": {
+    "postinstall": "patch-package",
     "test": "./test.sh"
   },
   "keywords": [
@@ -27,8 +28,11 @@
   "author": "milahu",
   "license": "MIT",
   "dependencies": {
+    "@milahu/patch-package-with-pnpm-support": "*",
     "@npmcli/arborist": "*",
-    "@pnpm/lockfile-file": "*",
+    "@pnpm/find-workspace-dir": "*",
+    "@pnpm/find-workspace-packages": "*",
+    "@pnpm/lockfile-file": "5.0.0",
     "@pnpm/logger": "*",
     "@yarnpkg/lockfile": "*",
     "semver": "*"
