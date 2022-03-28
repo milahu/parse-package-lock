@@ -12,6 +12,11 @@ useful for
 * implementing a custom `npm install`
 * analysis of the dependency tree
 
+## todo
+
+* implement workspaces
+* test cycles (cyclic dependency graphs)
+
 ## similar projects
 
 * [snyk-nodejs-lockfile-parser](https://github.com/snyk/nodejs-lockfile-parser)
