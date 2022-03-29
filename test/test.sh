@@ -60,6 +60,33 @@ then
   echo ok
 fi
 
+# TODO add test for yarn1 -> https://github.com/yarnpkg/yarn
+
+if false
+then
+  # t = test name
+  t=workspace-yarn2
+  #rm -rf $t || true # remove old files
+  mkdir -p "$dir/$t" || true
+  if [ -d "$dir/$t/berry" ]
+  then
+    echo using existing download of yarn2
+  else
+    # TODO find a smaller test case
+    # 200 MB tgz file ...
+    echo downloading yarn2
+    curl -L -o "$dir/$t/berry.tgz" https://github.com/yarnpkg/berry/archive/b0511b9b332c4450927cd3a58da16dc6a5c3da46.tar.gz
+    tar xf "$dir/$t/berry.tgz" -C "$dir/$t/"
+    mv "$dir/$t"/berry-* "$dir/$t/berry"
+  fi
+  "$printPackageLock" "$dir/$t/berry/packages/yarnpkg-core/" "$dir/$t/berry/yarn.lock"
+  # >"$dir/$t/printPackageLock.out"
+  hash___actual=$(sha1sum "$dir/$t/printPackageLock.out" | cut -d' ' -f1)
+  hash_expected="TODO"
+  [ "$hash___actual" = "$hash_expected" ]
+  echo ok
+fi
+
 # t = test name
 t="cowsay@1.5.0"
 #rm -rf $dir/$t || true # remove old files

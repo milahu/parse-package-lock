@@ -36,9 +36,10 @@
     "@npmcli/arborist": "*",
     "@pnpm/find-workspace-dir": "*",
     "@pnpm/find-workspace-packages": "*",
-    "@pnpm/lockfile-file": "5.0.0",
+    "@pnpm/lockfile-file": "*",
     "@pnpm/logger": "*",
     "@yarnpkg/lockfile": "*",
+    "@yarnpkg/parsers": "*",
     "semver": "*"
   }
 }

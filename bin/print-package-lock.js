@@ -23,8 +23,11 @@ async function printPackageLock() {
       console.log([...pkg.parents, pkg].map(node => `${node.name}@${node.version}`).join(" ") + ` + integrity ${pkg.integrity}`);
     }
   };
+
   var onError = error => { error.message = "failed to resolve dependency: " + error.message; throw error; };
-  var onInfo = info => process.stderr.write(info + "\n");
+
+  //var onInfo = info => process.stderr.write(info + "\n");
+  var onInfo = info => console.log(info);
 
   if (process.argv.length < 3 || 4 < process.argv.length) {
     process.stderr.write([
@@ -48,8 +51,12 @@ async function printPackageLock() {
   
   const lockfilePath = process.argv[3] || null;
 
+  /*
   var peerDependencies = true;
-  var devDependencies = true;
+  var devDependencies = true; // yarn2: no, npmv7: yes
+  */
+  var peerDependencies = null;
+  var devDependencies = null;
   await parsePackageLock({ packagePath, lockfilePath, onPackage, onError, onInfo, peerDependencies, devDependencies });
 }
 
