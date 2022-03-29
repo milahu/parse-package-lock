@@ -16,10 +16,13 @@ useful for
 ## todo
 
 * [ ] workspaces
-  * [ ] [npm](https://docs.npmjs.com/cli/v7/using-npm/workspaces)
+  * [x] [npm](https://docs.npmjs.com/cli/v7/using-npm/workspaces) (TODO verify)
   * [ ] [yarn](https://yarnpkg.com/features/workspaces)
   * [x] [pnpm](https://pnpm.io/workspaces) (TODO verify)
 * [ ] test cycles (cyclic dependency graphs)
+  * [x] fix infinite recursion: `RangeError: Maximum call stack size exceeded`
+    * caused by `./bin/print-package-lock.js ./test/tmp/test/workspace-npm/npm/workspaces/arborist/ ./test/tmp/test/workspace-npm/npm/package-lock.json`
+    * fix: `name` &rarr; `dep.name`
 * [x] convert to ESM
 * [ ] add typescript declaration file `*.d.ts`
 * [x] separate code: lib vs bin
