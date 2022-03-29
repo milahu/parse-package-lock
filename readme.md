@@ -1,4 +1,4 @@
-# parselock
+# parse-package-lock
 
 parse lockfiles of npm, yarn, pnpm
 
@@ -22,6 +22,7 @@ useful for
 * [ ] test cycles (cyclic dependency graphs)
 * [ ] convert to ESM?
 * [ ] add typescript declaration file `*.d.ts`
+* [ ] validate lockfile: must be in sync with package.json
 
 ## similar projects
 

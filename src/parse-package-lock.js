@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-// parselock.js
+// parse-package-lock.js
 // parse lockfile to deep tree of dependencies
 
 // cycles are handled by passing `isCycle: true|false` to the callback function
