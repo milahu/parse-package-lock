@@ -20,9 +20,11 @@ useful for
   * [ ] [yarn](https://yarnpkg.com/features/workspaces)
   * [x] [pnpm](https://pnpm.io/workspaces) (TODO verify)
 * [ ] test cycles (cyclic dependency graphs)
-* [ ] convert to ESM?
+* [x] convert to ESM
 * [ ] add typescript declaration file `*.d.ts`
+* [ ] separate code: lib vs bin
 * [ ] validate lockfile: must be in sync with package.json
+* [ ] tolerate missing dependencies? peerDependencies, devDependencies. just install as much as possible from the lockfile
 
 ## similar projects
 

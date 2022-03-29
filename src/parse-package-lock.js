@@ -8,8 +8,8 @@
 
 // TODO unify interface: `type` and `isDev`
 
-var fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
 const pnpm_version = "6.32.3"; // TODO update
 
@@ -89,7 +89,7 @@ async function parse_lockfile({ pkgPath, lockfilePath, onPkg }) {
     ...package_data.dependencies, // highest precedence
   };
   console.log("declared dependencies:");
-  for ([name, version] of Object.entries(specObj)) {
+  for (const [name, version] of Object.entries(specObj)) {
     console.log(`${name}@${version}`);
   }
   const lockfile_type_map = {
@@ -115,9 +115,9 @@ async function parse_lockfile({ pkgPath, lockfilePath, onPkg }) {
 
 async function parse_lockfile_npm({ pkgPath, onPkg }) {
 
-  var npm = require("@npmcli/arborist");
+  const npm = await import("@npmcli/arborist");
   // https://www.npmjs.com/package/@npmcli/arborist
-  var arb = new npm({ path: pkgPath });
+  const arb = new npm.Arborist({ path: pkgPath });
   //var lockData = await arb.loadVirtual(); // load virtual tree
   var lockData = await arb.buildIdealTree({
     legacyBundling: true,
@@ -127,7 +127,7 @@ async function parse_lockfile_npm({ pkgPath, onPkg }) {
   var walk = function thisFunction(pkg, onPkg, depth = 0, parents = [], parentNames = new Set(), rootNode = null) {
     if (!pkg.children) return;
     if (!rootNode) rootNode = pkg; // only rootNode has pkg.meta
-    for ([name, edge] of pkg.edgesOut.entries()) {
+    for (const [name, edge] of pkg.edgesOut.entries()) {
       var pkg = edge.to;
       var meta = rootNode.meta.data.packages[pkg.location];
       if (!meta) {
@@ -150,7 +150,8 @@ async function parse_lockfile_npm({ pkgPath, onPkg }) {
 
 async function parse_lockfile_yarn({ lockfilePath, specObj, onPkg }) {
 
-  var yarn = require("@yarnpkg/lockfile");
+  const yarnModule = await import("@yarnpkg/lockfile");
+  const yarn = yarnModule.default;
   // node_modules/@yarnpkg/lockfile/index.js
   var s = fs.readFileSync(lockfilePath, "utf8");
   var lockData = yarn.parse(s);
@@ -166,12 +167,12 @@ async function parse_lockfile_yarn({ lockfilePath, specObj, onPkg }) {
     var pkg = { name, spec, version: node.version, resolved: node.resolved, integrity: node.integrity, parentNames, parents, };
     onPkg(pkg);
     if (isCycle == false && node.dependencies) {
-      for ([n, v] of Object.entries(node.dependencies)) {
+      for (const [n, v] of Object.entries(node.dependencies)) {
         thisFunction(lockData, n, v, onPkg, depth+1, new Set([...parentNames, name]), [...parents, pkg]);
       }
     }
   }
-  for ([name, version] of Object.entries(specObj)) {
+  for (const [name, version] of Object.entries(specObj)) {
     walk(lockData, name, version, onPkg);
   }
 }
@@ -181,23 +182,11 @@ async function parse_lockfile_yarn({ lockfilePath, specObj, onPkg }) {
 async function parse_lockfile_pnpm({ pkgPath, lockfilePath, specObj, onPkg }) {
 
   // TODO min or max?
-  const minSatisfying = require('semver/ranges/min-satisfying')
-  //const semverMaxSatisfying = require('semver/ranges/max-satisfying')
+  const minSatisfyingModule = await import('semver/ranges/min-satisfying.js');
+  const minSatisfying = minSatisfyingModule.default;
   var resolveVersion = minSatisfying;
-  /*
-  function resolveVersion(versionList, spec) {
-    try {
-      return minSatisfying(versionList, spec);
-    }
-    catch (e) {
-      console.log(`failed to resolve version. spec: ${spec}. versionList: ${versionList}`)
-      console.log(e);
-      throw e;
-    }
-  }
-  */
 
-  var pnpm = require("@pnpm/lockfile-file");
+  const pnpm = await import("@pnpm/lockfile-file");
   // patched version of @pnpm/lockfile-file
   // https://github.com/pnpm/pnpm/pull/4494
   // patches/@pnpm+lockfile-file+5.0.0.patch
@@ -297,12 +286,12 @@ async function parse_lockfile_pnpm({ pkgPath, lockfilePath, specObj, onPkg }) {
     // , isDev: node.dev
     onPkg(pkg);
     if (isCycle == false && node.dependencies) {
-      for ([n, v] of Object.entries(node.dependencies)) {
+      for (const [n, v] of Object.entries(node.dependencies)) {
         thisFunction(lockData, n, v, onPkg, depth+1, new Set([...parentNames, name]), [...parents, pkg], versionCache);
       }
     }
   }
-  for ([name, version] of Object.entries(specObj)) {
+  for (const [name, version] of Object.entries(specObj)) {
     await walk(lockData, name, version, onPkg);
   }
 }

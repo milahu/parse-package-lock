@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "parse lockfiles of npm, yarn, pnpm",
   "main": "src/parse-package-lock.js",
+  "type": "module",
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "postinstall": "patch-package",
     "test": "./test.sh"
