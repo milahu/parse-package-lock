@@ -2,7 +2,7 @@
   "name": "parse-package-lock",
   "version": "0.0.1",
   "description": "parse lockfiles of npm, yarn, pnpm",
-  "main": "src/parse-package-lock.js",
+  "main": "lib/parse-package-lock.js",
   "type": "module",
   "engines": {
     "node": ">=12"
