@@ -2,67 +2,65 @@
 
 set -e # exit on error
 set -x # xtrace
+set -o pipefail
 
-parselock="$(readlink -f ../src/parselock.js)"
+printPackageLock="$(realpath "$(dirname "$0")"/../bin/print-package-lock.js)"
 
-mkdir tmp || true
-(
-  cd tmp
-  mkdir test || true
-  (
-    cd test
+dir="$(dirname "$0")"/tmp/test
 
-    if false
+if true
+then
+  # t = test name
+  t=workspace-pnpm
+  #rm -rf $t || true # remove old files
+  mkdir -p "$dir/$t" || true
+
+    if [ -d "$dir/$t/pnpm" ]
     then
-      # t = test name
-      t=workspace-pnpm
-      rm -rf $t || true # remove old files
-      mkdir $t
-      (
-        cd workspace-pnpm
-        # TODO find a smaller test case
-        # 40 MB tgz file ...
-        curl -L -o pnpm.tgz https://github.com/pnpm/pnpm/archive/cfe345b6d6efaa9ea196ff009e2404f07d79d54a.tar.gz
-        tar xf pnpm.tgz
-        mv pnpm-* pnpm
-        cd pnpm
-        #cd packages/plugin-commands-installation
-        "$parselock" ./packages/plugin-commands-installation/ ./pnpm-lock.yaml >parselock.out
-        hash___actual=$(sha1sum parselock.out | cut -d' ' -f1)
-        hash_expected="ce7521224c002e36d1845bd737230ec9e5834186"
-        [ "$hash___actual" = "$hash_expected" ] && echo ok
-      ) # cd $t
+      echo using existing download of pnpm
+    else
+      # TODO find a smaller test case
+      # 40 MB tgz file ...
+      echo downloading pnpm
+      curl -L -o "$dir/$t/pnpm.tgz" https://github.com/pnpm/pnpm/archive/cfe345b6d6efaa9ea196ff009e2404f07d79d54a.tar.gz
+      tar xf "$dir/$t/pnpm.tgz" -C "$dir/$t/"
+      mv "$dir/$t"/pnpm-* "$dir/$t/pnpm"
     fi
+    "$printPackageLock" "$dir/$t/pnpm/packages/plugin-commands-installation/" "$dir/$t/pnpm/pnpm-lock.yaml" >"$dir/$t/printPackageLock.out"
+    hash___actual=$(sha1sum "$dir/$t/printPackageLock.out" | cut -d' ' -f1)
+    hash_expected="2c1b4441b4a488ee59d9ac26208589a9a06a5273"
+    [ "$hash___actual" = "$hash_expected" ]
+    echo ok
+fi
 
-    # t = test name
-    t="cowsay@1.5.0"
-    rm -rf $t || true # remove old files
-    mkdir $t
-    (
-      cd $t
+# t = test name
+t="cowsay@1.5.0"
+#rm -rf $dir/$t || true # remove old files
 
-      # m = manager of packages
-      for m in npm yarn pnpm
-      do
-        echo "m = $m"
-        mkdir $m
-        (
-          cd $m
-          #run_test $t $m
-          $m init -y
-          $m add $t
-          rm -rf node_modules
-          "$parselock" ./ >parselock.out
-        ) # cd $m
-      done # for m
+# m = manager of packages
+for m in npm yarn pnpm
+do
+  echo "m = $m"
+  mkdir -p "$dir/$t/$m" || true
+  #run_test $t $m
+  if [ -e "$dir/$t/$m/package.json" ]
+  then
+    echo using existing lockfile
+  else
+    echo creating new lockfile
+    ( cd "$dir/$t/$m" && $m init -y )
+    ( cd "$dir/$t/$m" && $m add $t )
+    rm -rf "$dir/$t/$m/node_modules"
+  fi
+  "$printPackageLock" "$dir/$t/$m/" >"$dir/$t/$m/printPackageLock.out"
+done # for m
 
-      # now all the parselock.out files should be same
-      find . -name parselock.out -print0 | xargs -0 diff --from-file && echo ok
+# now all the printPackageLock.out files should be same
+diff --from-file "$dir/$t/npm/printPackageLock.out" "$dir/$t"/*/printPackageLock.out
+echo ok
 
-      hash___actual=$(sha1sum npm/parselock.out | cut -d' ' -f1)
-      hash_expected="96e83e0d312649edd4f852e154622d524710dd7a"
-      [ "$hash___actual" = "$hash_expected" ] && echo ok
+hash___actual=$(sha1sum "$dir/$t/npm/printPackageLock.out" | cut -d' ' -f1)
+hash_expected="2d8367eb00dbc30bb0ba05651eeb3f8718f06a61"
+[ "$hash___actual" = "$hash_expected" ]
+echo ok
 
-    ) # cd $t
-  ) # cd test
-) # cd temp

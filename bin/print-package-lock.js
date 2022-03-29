@@ -11,6 +11,8 @@ async function printPackageLock() {
   var onPackage = function(pkg) {
     console.log([...pkg.parents, pkg].map(node => `${node.name}@${node.version}`).join(" "), pkg.integrity || pkg.resolved);
   };
+  var onError = error => { error.message = "failed to resolve dependency: " + error.message; throw error; };
+  var onInfo = info => process.stderr.write(info + "\n");
 
   if (process.argv.length < 3 || 4 < process.argv.length) {
     process.stderr.write([
@@ -34,7 +36,9 @@ async function printPackageLock() {
   
   const lockfilePath = process.argv[3] || null;
 
-  await parsePackageLock({ packagePath, lockfilePath, onPackage });
+  var peerDependencies = true;
+  var devDependencies = true;
+  await parsePackageLock({ packagePath, lockfilePath, onPackage, onError, onInfo, peerDependencies, devDependencies });
 }
 
 printPackageLock();

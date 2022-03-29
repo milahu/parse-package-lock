@@ -2,7 +2,7 @@
 
 parse lockfiles of npm, yarn, pnpm
 
-* only 200 lines of code: readable, hackable
+* only 300 lines of code: readable, hackable
 * using the original code to parse lockfiles
 
 ## why
@@ -15,16 +15,29 @@ useful for
 
 ## todo
 
-* [ ] implement workspaces
+* [ ] workspaces
   * [ ] [npm](https://docs.npmjs.com/cli/v7/using-npm/workspaces)
   * [ ] [yarn](https://yarnpkg.com/features/workspaces)
   * [x] [pnpm](https://pnpm.io/workspaces) (TODO verify)
 * [ ] test cycles (cyclic dependency graphs)
 * [x] convert to ESM
 * [ ] add typescript declaration file `*.d.ts`
-* [ ] separate code: lib vs bin
+* [x] separate code: lib vs bin
 * [ ] validate lockfile: must be in sync with package.json
-* [ ] tolerate missing dependencies? peerDependencies, devDependencies. just install as much as possible from the lockfile
+  * this should be covered by `ErrorCode.NotResolved` (TODO verify)
+* [x] tolerate missing dependencies? peerDependencies, devDependencies. just install as much as possible from the lockfile
+* [ ] alias names are needed in the result
+* [ ] protocols for spec-versions
+  * [ ] `npm:`
+  * [ ] `file:`
+    * https://docs.npmjs.com/cli/v7/configuring-npm/package-json#local-paths
+  * [ ] `workspace:`
+  * [ ] `github:`
+    * https://docs.npmjs.com/cli/v7/configuring-npm/package-json#github-urls
+  * [ ] `git:` `git+ssh:` `git+http:` `git+https:` `git+file:`
+  * [ ] `https:` `ftps:`
+    * https://docs.npmjs.com/cli/v7/configuring-npm/package-json#urls-as-dependencies
+  * more?
 
 ## similar projects
 
