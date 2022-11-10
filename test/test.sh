@@ -104,9 +104,10 @@ do
     echo creating new lockfile
     ( cd "$dir/$t/$m" && $m init -y )
     ( cd "$dir/$t/$m" && $m add $t )
-    rm -rf "$dir/$t/$m/node_modules"
+    mv "$dir/$t/$m/node_modules" "$dir/$t/$m/node_modules.a"
   fi
   "$printPackageLock" "$dir/$t/$m/" >"$dir/$t/$m/printPackageLock.out"
+  # TODO create node_modules.b && diff -r -q
 done # for m
 
 for f in "$dir/$t"/*/printPackageLock.out

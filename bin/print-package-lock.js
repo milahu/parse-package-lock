@@ -7,8 +7,10 @@ import path from "path";
 
 async function printPackageLock() {
 
+  var eventHandlers = {};
+
   // demo: print the dependency tree
-  var onPackage = function(pkg) {
+  eventHandlers.enterPackage = function(pkg) {
     //console.log([...pkg.parents, pkg].map(node => `${node.name}@${node.version}`).join(" "), pkg.integrity || pkg.resolved);
     //console.log([...pkg.parents, pkg].map(node => `${node.name}@${node.version}`).join(" ") + ` + integrity ${pkg.integrity} + resolved ${pkg.resolved}`);
     // resolved is different for npm/yarn/pnpm
@@ -24,10 +26,10 @@ async function printPackageLock() {
     }
   };
 
-  var onError = error => { error.message = "failed to resolve dependency: " + error.message; throw error; };
+  eventHandlers.error = error => { error.message = "failed to resolve dependency: " + error.message; throw error; };
 
-  //var onInfo = info => process.stderr.write(info + "\n");
-  var onInfo = info => console.log(info);
+  //eventHandlers.info = info => process.stderr.write(info + "\n");
+  eventHandlers.info = info => console.log(info);
 
   if (process.argv.length < 3 || 4 < process.argv.length) {
     process.stderr.write([
@@ -55,9 +57,11 @@ async function printPackageLock() {
   var peerDependencies = true;
   var devDependencies = true; // yarn2: no, npmv7: yes
   */
-  var peerDependencies = null;
-  var devDependencies = null;
-  await parsePackageLock({ packagePath, lockfilePath, onPackage, onError, onInfo, peerDependencies, devDependencies });
+  var requireDependencies = {};
+  requireDependencies.peer = null; // peerDependencies
+  requireDependencies.dev = null; // devDependencies
+
+  await parsePackageLock({ packagePath, lockfilePath, eventHandlers, requireDependencies });
 }
 
 printPackageLock();
