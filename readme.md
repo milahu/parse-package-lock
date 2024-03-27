@@ -48,3 +48,5 @@ useful for
   * [pnpm is not supported](https://github.com/snyk/nodejs-lockfile-parser/issues/111)
   * [integrity is missing](https://github.com/snyk/nodejs-lockfile-parser/pull/112)
   * 1354 lines of code in `lib/`
+* [pnpm import](https://pnpm.io/cli/import) - generate a pnpm-lock.yaml from another package manager's lockfile. Supported source files: package-lock.json npm-shrinkwrap.json yarn.lock. note: workspaces must be declared in pnpm-workspace.yaml
+* [antongolub/lockfile](https://github.com/antongolub/lockfile) - many protocols for spec-versions ("dependency protocols"), no pnpm support
